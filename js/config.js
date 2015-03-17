@@ -24,6 +24,12 @@ module.exports=function($routeProvider,$locationProvider,$httpProvider) {
 	}).when('/config', {
 		templateUrl: 'templates/config.html',
 		controller: 'ConfigController'
+	}).when('/beers', {
+			templateUrl: 'templates/beers/main.html',
+			controller: 'BeersController'
+	}).when('/beers/new', {
+			templateUrl: 'templates/beers/beerForm.html',
+			controller: 'BeerAddController'
 	}).otherwise({
 		redirectTo: '/'
 	});

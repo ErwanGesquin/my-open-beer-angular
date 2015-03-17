@@ -17,14 +17,14 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de données :  `open-beer`
+-- Base de données :  `open-beers`
 --
 CREATE DATABASE IF NOT EXISTS `open-beer`;
 use `open-beer`;
 -- --------------------------------------------------------
 
 --
--- Structure de la table `beer`
+-- Structure de la table `beers`
 --
 
 CREATE TABLE IF NOT EXISTS `beer` (
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `beer` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
--- Contenu de la table `beer`
+-- Contenu de la table `beers`
 --
 
 INSERT INTO `beer` (`id`, `name`, `description`, `abv`, `photo`, `created_at`, `updated_at`, `idBrewery`) VALUES
@@ -109,7 +109,7 @@ INSERT INTO `user` (`id`, `mail`, `password`, `salt`) VALUES
 --
 
 --
--- Index pour la table `beer`
+-- Index pour la table `beers`
 --
 ALTER TABLE `beer`
  ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `name` (`name`), ADD KEY `idBrewery` (`idBrewery`);
@@ -131,7 +131,7 @@ ALTER TABLE `user`
 --
 
 --
--- AUTO_INCREMENT pour la table `beer`
+-- AUTO_INCREMENT pour la table `beers`
 --
 ALTER TABLE `beer`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
@@ -150,7 +150,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 
 --
--- Contraintes pour la table `beer`
+-- Contraintes pour la table `beers`
 --
 ALTER TABLE `beer`
 ADD CONSTRAINT `beer_ibfk_1` FOREIGN KEY (`idBrewery`) REFERENCES `brewery` (`id`);
