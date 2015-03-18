@@ -427,12 +427,6 @@ module.exports=function($routeProvider,$locationProvider,$httpProvider) {
 	}).when('/config', {
 		templateUrl: 'templates/config.html',
 		controller: 'ConfigController'
-	}).when('/beers', {
-		templateUrl: 'templates/beers/main.html',
-		controller: 'BeersController'
-	}).when('/beers/new', {
-		templateUrl: 'templates/beers/beerForm.html',
-		controller: 'BeerAddController'
 	}).otherwise({
 		redirectTo: '/'
 	});
@@ -453,7 +447,6 @@ module.exports=function($scope,config,$location){
 		if($scope.frmConfig.$dirty){
 			config.server=$scope.config.server;
 			config.breweries=$scope.config.breweries;
-			config.beers=$scope.config.beers;
 		}
 		$location.path("/");
 	};
@@ -463,17 +456,13 @@ module.exports=function($scope,config,$location){
 };
 },{}],13:[function(require,module,exports){
 module.exports=function() {
-	var factory={breweries:{}, beers:{}, server:{}};
+	var factory={breweries:{},server:{}};
 	factory.activeBrewery=undefined;
 	factory.breweries.loaded=false;
 	factory.breweries.refresh="all";//all|ask
 	factory.breweries.update="immediate";//deffered|immediate
-	factory.activeBeer=undefined;
-	factory.beers.loaded=false;
-	factory.beers.refresh="all";//all|ask
-	factory.beers.update="immediate";//deffered|immediate
 	factory.server.privateToken="";
-	factory.server.restServerUrl="http://127.0.0.1/rest-open-beers/";
+	factory.server.restServerUrl="http://127.0.0.1/rest-open-beer/";
 	factory.server.force=false;
 	return factory;
 };
@@ -673,7 +662,6 @@ module.exports=function(rest,config,$route){
 			callback=function(){
 				self.operations.length=0;
 				config.breweries.loaded=false;
-				config.beers.loaded=false;
 				$route.reload();
 			};
 		}
@@ -687,7 +675,6 @@ module.exports=function(rest,config,$route){
 			self.execute(0);
 		}else{
 			config.breweries.loaded=false;
-			config.beers.loaded=false;
 			$route.reload();
 		}
 	}
