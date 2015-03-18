@@ -702,7 +702,7 @@ module.exports=function() {
 	factory.beers.refresh="all";//all|ask
 	factory.beers.update="immediate";//deffered|immediate
 	factory.server.privateToken="";
-	factory.server.restServerUrl="http://127.0.0.1/rest-open-beers/";
+	factory.server.restServerUrl="http://127.0.0.1/rest-open-beer/";
 	factory.server.force=false;
 	return factory;
 };
