@@ -1,0 +1,1 @@
+module.exports=function($scope,rest,$timeout,$location,config,$route,save) {}

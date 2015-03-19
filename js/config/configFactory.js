@@ -1,5 +1,5 @@
 module.exports=function() {
-	var factory={breweries:{}, beers:{}, server:{}};
+	var factory={breweries:{}, beers:{}, connexion:{}, server:{}};
 	factory.activeBrewery=undefined;
 	factory.breweries.loaded=false;
 	factory.breweries.refresh="all";//all|ask
