@@ -1,7 +1,13 @@
-module.exports=function($scope,rest,$timeout,$location,config,$route,save) {
+module.exports=function ($http,$resource,$location,rest, restConfig) {
 
-	data.posted={"mail":"admin@local.fr","password":"0000"};
-	this.connect(data,function(d){console.log("Connexion réussie, token : "+d.token)});
+
+	this.user = {
+		mail: "",
+		password: "",
+		token: false
+	};
+
+	this.connect(data,function(user){console.log("Connexion réussie, token : "+user.token)});
 
 	this.connect=function(response,callBack){
 		var request = $http({
@@ -15,6 +21,12 @@ module.exports=function($scope,rest,$timeout,$location,config,$route,save) {
 		}).error(function(data, status, headers, config){
 			self.addMessage({type: "warning", content:"Erreur de connexion au serveur, statut de la réponse : "+status+"<br>"+data.message});
 		});
-	}
+	};
 
-}
+	this.disconnect = function(){
+		this.user.nom = "";
+		this.user.mail = "";
+		this.user.token = false;
+	};
+
+};
