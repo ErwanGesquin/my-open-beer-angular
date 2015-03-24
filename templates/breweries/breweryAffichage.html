@@ -1,12 +1,12 @@
-<form name="AffBrewery" data-ng-submit="AffBrewery.$valid && affichage()" novalidate data-ng-init="setFormScope(this)">
-    <div class="form-group">
-        <label data-ng-model="activeBrewery.name">{{activeBrewery.name}}</label>
+<br>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{Brewery.name}}</h3>
     </div>
-    <div class="form-group">
-        <label data-ng-model="activeBrewery.url">{{url}}</label>
-        <span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
+    <div class="panel-body">
+        {{Brewery.name}}
+        {{Brewery.url}}
+        {{Brewery.created_at}}
+        {{Brewery.updated_at}}
     </div>
-    <div class="form-group">
-        <label data-ng-model="activeBrewery.created_at">{{created_at}}</label>
-    </div>
-</form>
+</div>
