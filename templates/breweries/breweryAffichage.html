@@ -4,9 +4,33 @@
         <h3 class="panel-title">{{Brewery.name}}</h3>
     </div>
     <div class="panel-body">
-        {{Brewery.name}}
-        {{Brewery.url}}
-        {{Brewery.created_at}}
-        {{Brewery.updated_at}}
+        <p>Nom de la brasserie:<br>
+            {{Brewery.name}}</p>
+        <p>URL:<br>
+            {{Brewery.url}}</p>
+        <table>
+            <tr>
+                <td>
+                    Date de création:
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    Date de mise à jour:
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{Brewery.created_at}}
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    {{Brewery.updated_at}}
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
