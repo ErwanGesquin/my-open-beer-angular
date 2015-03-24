@@ -12,8 +12,8 @@ module.exports=function ($http,$resource,$location,rest, restConfig) {
 	this.connect=function(response,callBack){
 		var request = $http({
 			method: "POST",
-			url: restConfig.server.restServerUrl+"user/connect",
 			data: $.param(response.posted),
+			url: restConfig.server.restServerUrl+"user/connect",
 			headers: self.headers
 		});
 		request.success(function(data, status, headers, config) {
