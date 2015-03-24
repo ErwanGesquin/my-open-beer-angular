@@ -171,7 +171,7 @@ run(['$rootScope','$location', '$routeParams', function($rootScope, $location, $
 }]
 ).factory("config", require("./config/configFactory"));
 
-},{"./addons/drag":1,"./addons/modal":2,"./addons/modalService":3,"./addons/notDeletedFilter":4,"./addons/sortBy":5,"./beers/beersModule":10,"./breweries/breweriesModule":12,"./config":15,"./config/configFactory":17,"./config/configModule":18,"./mainController":19,"./save/saveController":20,"./services/rest":21,"./services/save":22}],7:[function(require,module,exports){
+},{"./addons/drag":1,"./addons/modal":2,"./addons/modalService":3,"./addons/notDeletedFilter":4,"./addons/sortBy":5,"./beers/beersModule":10,"./breweries/breweriesModule":12,"./config":16,"./config/configFactory":18,"./config/configModule":19,"./mainController":20,"./save/saveController":21,"./services/rest":22,"./services/save":23}],7:[function(require,module,exports){
 module.exports=function($scope,config,$location,rest,save,$document,modalService) {
 
 	$scope.data={};
@@ -489,6 +489,14 @@ module.exports=function($scope,rest,$timeout,$location,config,$route,save) {
 		config.activeBrewery.reference=$scope.activeBrewery;
 		$location.path("breweries/update");
 	}
+
+	$scope.affichage=function(brewery){
+		if(angular.isDefined(brewery))
+			$scope.activeBrewery=brewery;
+		config.activeBrewery=angular.copy($scope.activeBrewery);
+		config.activeBrewery.reference=$scope.activeBrewery;
+		$location.path("breweries/affichage");
+	}
 	
 	$scope.update=function(brewery,force,callback){
 		if(angular.isUndefined(brewery)){
@@ -530,10 +538,11 @@ module.exports=function($scope,rest,$timeout,$location,config,$route,save) {
 },{}],12:[function(require,module,exports){
 var appBreweries=angular.module("BreweriesApp", []).
 controller("BreweriesController", ["$scope","rest","$timeout","$location","config","$route","save",require("./breweriesController")]).
+controller("BreweryAffichageController", ["$scope","rest","$timeout","$location","config","$route","save",require("./breweryAffichageController")]).
 controller("BreweryAddController",["$scope","config","$location","rest","save","$document","modalService",require("./breweryAddController")]).
 controller("BreweryUpdateController",["$scope","config","$location","rest","save","$document","modalService","$controller",require("./breweryUpdateController")]);
 module.exports=angular.module("BreweriesApp").name;
-},{"./breweriesController":11,"./breweryAddController":13,"./breweryUpdateController":14}],13:[function(require,module,exports){
+},{"./breweriesController":11,"./breweryAddController":13,"./breweryAffichageController":14,"./breweryUpdateController":15}],13:[function(require,module,exports){
 module.exports=function($scope,config,$location,rest,save,$document,modalService) {
 	
 	$scope.data={};
@@ -590,6 +599,26 @@ module.exports=function($scope,config,$location,rest,save,$document,modalService
 	}
 };
 },{}],14:[function(require,module,exports){
+module.exports=function($scope,config,$location,modalService, $controller) {
+    $controller('BreweryAddController', {$scope: $scope});
+
+    if (angular.isUndefined(config.activeBrewery)) {
+        $location.path("breweries/");
+    }
+    $scope.activeBrewery = config.activeBrewery;
+
+    $scope._affichage = function (brewery) {
+        $scope.data.posted = {
+            "name": brewery.name,
+            "url": brewery.url,
+            "created_at": brewery.created_at,
+            "updated_at": brewery.updated_at
+
+        };
+    }
+}
+
+},{}],15:[function(require,module,exports){
 module.exports=function($scope,config,$location,rest,save,$document,modalService, $controller){
 	$controller('BreweryAddController', {$scope: $scope});
 
@@ -629,7 +658,7 @@ module.exports=function($scope,config,$location,rest,save,$document,modalService
 		return result;
 	}
 };
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 module.exports=function($routeProvider,$locationProvider,$httpProvider) {
 	//$httpProvider.defaults.useXDomain = true;
 	//$httpProvider.defaults.withCredentials = true;
@@ -650,6 +679,9 @@ module.exports=function($routeProvider,$locationProvider,$httpProvider) {
 	}).when('/breweries/update', {
 		templateUrl: 'templates/breweries/breweryForm.html',
 		controller: 'BreweryUpdateController'
+	}).when('/breweries/affichage', {
+		templateUrl: 'templates/breweries/breweryAffichage.html',
+		controller: 'BreweryAffichageController'
 	}).when('/saves', {
 		templateUrl: 'templates/saveMain.html',
 		controller: 'SaveController'
@@ -669,7 +701,7 @@ module.exports=function($routeProvider,$locationProvider,$httpProvider) {
 		$locationProvider.html5Mode(true);
 	}
 };
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 module.exports=function($scope,config,$location){
 
 	$scope.config=angular.copy(config);
@@ -690,9 +722,9 @@ module.exports=function($scope,config,$location){
 		$location.path("/");
 	};
 };
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 module.exports=function() {
-	var factory={breweries:{}, beers:{}, server:{}};
+	var factory={breweries:{}, beers:{}, connexion:{}, server:{}};
 	factory.activeBrewery=undefined;
 	factory.breweries.loaded=false;
 	factory.breweries.refresh="all";//all|ask
@@ -706,11 +738,11 @@ module.exports=function() {
 	factory.server.force=false;
 	return factory;
 };
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 var configApp=angular.module("ConfigApp", []).
 controller("ConfigController", ["$scope","config","$location",require("./configController")]);
 module.exports=configApp.name;
-},{"./configController":16}],19:[function(require,module,exports){
+},{"./configController":17}],20:[function(require,module,exports){
 module.exports=function($scope,$location,save,$window) {
 	
 	$scope.hasOperations=function(){
@@ -733,7 +765,7 @@ module.exports=function($scope,$location,save,$window) {
 	});
 	
 };
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 module.exports=function($scope,$location,save){
 	$scope.data=save;
 	$scope.allSelected=false;
@@ -773,7 +805,7 @@ module.exports=function($scope,$location,save){
 		return true;
 	};
 };
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 module.exports=function($http,$resource,$location,restConfig,$sce) {
 	var self=this;
 	if(angular.isUndefined(this.messages))
@@ -783,14 +815,15 @@ module.exports=function($http,$resource,$location,restConfig,$sce) {
 		return '?token='+restConfig.server.privateToken+'&force='+restConfig.server.force;
 	}
 	this.headers={ 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-	    	'Accept': 'application/json'
-	    	};
+			'Accept': 'application/json'
+	};
+	
 	this.getAll=function(response,what){
 		var request = $http({
-		    method: "GET",
-		    url: restConfig.server.restServerUrl+what+this.getParams(),
-		    headers: {'Accept': 'application/json'},
-		    callback: 'JSON_CALLBACK'
+			method: "GET",
+			url: restConfig.server.restServerUrl+what+this.getParams(),
+			headers: {'Accept': 'application/json'},
+			callback: 'JSON_CALLBACK'
 		});
 		request.success(function(data, status, headers, config) {
 			response[what]=data;
@@ -801,10 +834,6 @@ module.exports=function($http,$resource,$location,restConfig,$sce) {
 			self.addMessage({type: "danger", content: "Erreur de connexion au serveur, statut de la réponse : "+status});
 			console.log("Erreur de connexion au serveur, statut de la réponse : "+status);
 		});
-	};
-	this.addMessage=function(message){
-		content=$sce.trustAsHtml(message.content);
-		self.messages.push({"type":message.type,"content":content});
 	};
 	
 	this.post=function(response,what,name,callback){
@@ -837,10 +866,10 @@ module.exports=function($http,$resource,$location,restConfig,$sce) {
 		$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 		$http.defaults.headers.post["Accept"] = "text/plain";
 		var request = $http({
-		    method: "PUT",
-		    url: restConfig.server.restServerUrl+what+'/'+id+this.getParams(),
-		    data: response.posted,
-		    headers: self.headers
+			method: "PUT",
+			url: restConfig.server.restServerUrl+what+'/'+id+this.getParams(),
+			data: response.posted,
+			headers: self.headers
 		});
 		request.success(function(data, status, headers, config) {
 			self.addMessage(data.message);
@@ -871,12 +900,17 @@ module.exports=function($http,$resource,$location,restConfig,$sce) {
 			self.addMessage({type: "warning", content: "Erreur de connexion au serveur, statut de la réponse : "+status+"<br>"+data.message});
 		});
 	};
+
+	this.addMessage=function(message){
+		content=$sce.trustAsHtml(message.content);
+		self.messages.push({"type":message.type,"content":content});
+	};
 	
 	this.clearMessages=function(){
 		self.messages.length=0;
 	};
 };
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 module.exports=function(rest,config,$route){
 	var self=this;
 	this.dataScope={};
