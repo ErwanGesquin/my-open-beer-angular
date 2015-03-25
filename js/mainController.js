@@ -1,5 +1,11 @@
-module.exports=function($scope,$location,save,$window) {
-	
+module.exports=function($scope,$location,save,$window, login) {
+
+	$scope.user = {
+		mail: "",
+		password: "",
+		token: false
+	};
+
 	$scope.hasOperations=function(){
 		return save.operations.length>0;
 	};
@@ -18,5 +24,11 @@ module.exports=function($scope,$location,save,$window) {
 	$scope.$on("$destroy", function () {
 		$window.removeEventListener('beforeunload', beforeUnload);
 	});
-	
+
+	$scope.connect = function(){
+		login.user = $scope.user;
+		login.connect();
+	}
+
+
 };
