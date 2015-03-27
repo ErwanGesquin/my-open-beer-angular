@@ -138,10 +138,11 @@ module.exports=function(){
 };
 },{}],6:[function(require,module,exports){
 angular.module("mainApp",["ngRoute","ngResource","ngAnimate",require("./breweries/breweriesModule"),require("./config/configModule"), require("./beers/beersModule")]).
-controller("MainController", ["$scope","$location","save","$window",require("./mainController")]).
+controller("MainController", ["$scope","$location","save","$window", "login",require("./mainController")]).
 controller("SaveController", ["$scope","$location","save",require("./save/saveController")]).
 service("rest", ["$http","$resource","$location","config","$sce",require("./services/rest")]).
 service("save", ["rest","config","$route",require("./services/save")]).
+service("login", ["$http","$resource","$location","rest",require("./services/login")]).
 config(["$routeProvider","$locationProvider","$httpProvider",require("./config")]).
 filter("NotDeletedFilter",require("./addons/notDeletedFilter")).
 directive("sortBy", [require("./addons/sortBy")]).
@@ -171,7 +172,7 @@ run(['$rootScope','$location', '$routeParams', function($rootScope, $location, $
 }]
 ).factory("config", require("./config/configFactory"));
 
-},{"./addons/drag":1,"./addons/modal":2,"./addons/modalService":3,"./addons/notDeletedFilter":4,"./addons/sortBy":5,"./beers/beersModule":11,"./breweries/breweriesModule":13,"./config":17,"./config/configFactory":19,"./config/configModule":20,"./mainController":21,"./save/saveController":22,"./services/rest":23,"./services/save":24}],7:[function(require,module,exports){
+},{"./addons/drag":1,"./addons/modal":2,"./addons/modalService":3,"./addons/notDeletedFilter":4,"./addons/sortBy":5,"./beers/beersModule":11,"./breweries/breweriesModule":13,"./config":17,"./config/configFactory":19,"./config/configModule":20,"./mainController":21,"./save/saveController":22,"./services/login":23,"./services/rest":24,"./services/save":25}],7:[function(require,module,exports){
 module.exports=function($scope,config,$location,rest,save,$document,modalService) {
 
 	$scope.data={};
@@ -698,6 +699,9 @@ module.exports=function($routeProvider,$locationProvider,$httpProvider) {
 	}).when('/beers/new', {
 			templateUrl: 'templates/beers/beerForm.html',
 			controller: 'beerAddController'
+	}).when('/login', {
+			templateUrl: 'templates/login/main.html',
+			controller: 'mainController'
 	}).otherwise({
 		redirectTo: '/'
 	});
@@ -747,8 +751,14 @@ var configApp=angular.module("ConfigApp", []).
 controller("ConfigController", ["$scope","config","$location",require("./configController")]);
 module.exports=configApp.name;
 },{"./configController":18}],21:[function(require,module,exports){
-module.exports=function($scope,$location,save,$window) {
-	
+module.exports=function($scope,$location,save,$window, login) {
+
+	$scope.user = {
+		mail: "",
+		password: "",
+		token: false
+	};
+
 	$scope.hasOperations=function(){
 		return save.operations.length>0;
 	};
@@ -767,7 +777,13 @@ module.exports=function($scope,$location,save,$window) {
 	$scope.$on("$destroy", function () {
 		$window.removeEventListener('beforeunload', beforeUnload);
 	});
-	
+
+	$scope.connect = function(){
+		login.user = $scope.user;
+		login.connect();
+	}
+
+
 };
 },{}],22:[function(require,module,exports){
 module.exports=function($scope,$location,save){
@@ -810,6 +826,30 @@ module.exports=function($scope,$location,save){
 	};
 };
 },{}],23:[function(require,module,exports){
+module.exports=function ($http,$resource,$location,rest) {
+
+
+	this.user = {
+		mail: "",
+		password: "",
+		token: false
+	};
+
+
+	this.connect = function(){
+		rest.connect(this.user,function(data){
+			console.log(data);
+		} );
+	};
+
+	this.disconnect = function(){
+		this.user.nom = "";
+		this.user.mail = "";
+		this.user.token = false;
+	};
+
+};
+},{}],24:[function(require,module,exports){
 module.exports=function($http,$resource,$location,restConfig,$sce) {
 	var self=this;
 	if(angular.isUndefined(this.messages))
@@ -913,8 +953,22 @@ module.exports=function($http,$resource,$location,restConfig,$sce) {
 	this.clearMessages=function(){
 		self.messages.length=0;
 	};
+
+	this.connect=function(response,callBack){
+		var request = $http({
+			method: "POST",
+			data: $.param(response.posted),
+			url: restConfig.server.restServerUrl+"user/connect",
+			headers: self.headers
+		});
+		request.success(function(data, status, headers, config) {
+			callback(data);//Connexion réussie
+		}).error(function(data, status, headers, config){
+			self.addMessage({type: "warning", content:"Erreur de connexion au serveur, statut de la réponse : "+status+"<br>"+data.message});
+		});
+	};
 };
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 module.exports=function(rest,config,$route){
 	var self=this;
 	this.dataScope={};
