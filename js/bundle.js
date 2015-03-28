@@ -412,7 +412,7 @@ module.exports=function($scope,rest,$timeout,$location,config,$route,save) {
 },{}],11:[function(require,module,exports){
 var appBeers=angular.module("BeersApp", []).
 	controller("beersController", ["$scope","rest","$timeout","$location","config","$route","save",require("./beersController")]).
-	controller("beersController", ["$scope","rest","$timeout","$location","config","$route","save",require("./beerAffichageController")]).
+	controller("beersAffichageController", ["$scope","rest","$timeout","$location","config","$route","save",require("./beerAffichageController")]).
 	controller("beerAddController",["$scope","config","$location","rest","save","$document","modalService",require("./beerAddController")]).
 	controller("beerUpdateController",["$scope","config","$location","rest","save","$document","modalService","$controller",require("./beerUpdateController")]);
 module.exports=angular.module("BeersApp").name;
@@ -684,9 +684,6 @@ module.exports=function($routeProvider,$locationProvider,$httpProvider) {
 	}).when('/breweries/affichage', {
 		templateUrl: 'templates/breweries/breweryAffichage.html',
 		controller: 'BreweryAffichageController'
-	}).when('/beers/affichage', {
-		templateUrl: 'templates/beers/beerAffichage.html',
-		controller: 'BeerAffichageController'
 	}).when('/saves', {
 		templateUrl: 'templates/saveMain.html',
 		controller: 'SaveController'
@@ -699,6 +696,9 @@ module.exports=function($routeProvider,$locationProvider,$httpProvider) {
 	}).when('/beers/new', {
 			templateUrl: 'templates/beers/beerForm.html',
 			controller: 'beerAddController'
+	}).when('/beers/affichage', {
+		templateUrl: 'templates/beers/beerAffichage.html',
+		controller: 'BeerAffichageController'
 	}).when('/login', {
 			templateUrl: 'templates/login/main.html',
 			controller: 'mainController'
