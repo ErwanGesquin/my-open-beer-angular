@@ -412,7 +412,7 @@ module.exports=function($scope,rest,$timeout,$location,config,$route,save) {
 },{}],11:[function(require,module,exports){
 var appBeers=angular.module("BeersApp", []).
 	controller("beersController", ["$scope","rest","$timeout","$location","config","$route","save",require("./beersController")]).
-	controller("beersAffichageController", ["$scope","rest","$timeout","$location","config","$route","save",require("./beerAffichageController")]).
+	controller("beerAffichageController", ["$scope","rest","$timeout","$location","config","$route","save",require("./beerAffichageController")]).
 	controller("beerAddController",["$scope","config","$location","rest","save","$document","modalService",require("./beerAddController")]).
 	controller("beerUpdateController",["$scope","config","$location","rest","save","$document","modalService","$controller",require("./beerUpdateController")]);
 module.exports=angular.module("BeersApp").name;
@@ -698,7 +698,7 @@ module.exports=function($routeProvider,$locationProvider,$httpProvider) {
 			controller: 'beerAddController'
 	}).when('/beers/affichage', {
 		templateUrl: 'templates/beers/beerAffichage.html',
-		controller: 'BeerAffichageController'
+		controller: 'beerAffichageController'
 	}).when('/login', {
 			templateUrl: 'templates/login/main.html',
 			controller: 'mainController'
